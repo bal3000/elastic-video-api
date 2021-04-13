@@ -20,14 +20,14 @@ router.get(
       );
 
       if (!data || data.match.length === 0) {
-        res.status(404).send('Not Found');
+        res.sendStatus(404);
         return;
       }
 
       res.send(data.match);
     } catch (err) {
       console.log(err);
-      res.status(500).send('Error occured');
+      res.sendStatus(500);
     }
   }
 );

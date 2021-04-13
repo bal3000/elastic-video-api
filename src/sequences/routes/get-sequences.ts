@@ -68,7 +68,7 @@ export function createSequencesRouter(client: Client): Router {
       });
 
       if (!result || !result.body || !result.body.aggregations) {
-        res.status(404).send('Not Found');
+        res.sendStatus(404);
         return;
       }
 

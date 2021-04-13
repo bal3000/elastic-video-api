@@ -4,6 +4,7 @@ import 'express-async-errors';
 
 import { getFixturesRouter } from './fixtures/routes/get-fixtures';
 import { createSequencesRouter } from './sequences/routes/get-sequences';
+import { getVideoRouter } from './vod/routes/get-video';
 
 const client = new Client({ node: '' });
 
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use(getFixturesRouter);
 app.use(createSequencesRouter(client));
+app.use(getVideoRouter);
 
 app.all('*', (req, res) => {
   res.status(404).send('Not Found');
