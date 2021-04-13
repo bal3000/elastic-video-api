@@ -10,7 +10,7 @@ const router = express.Router();
 // Get all
 router.get(
   '/api/fixtures/:clubId',
-  [param('clubId').not().isEmpty().withMessage('Please provide a clubId')],
+  param('clubId').not().isEmpty().withMessage('Please provide a clubId'),
   validateRequest,
   async (req: Request, res: Response) => {
     try {

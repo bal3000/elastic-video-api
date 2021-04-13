@@ -1,6 +1,6 @@
 import { ApiResponse, Client } from '@elastic/elasticsearch';
 import express, { Request, Response, Router } from 'express';
-import { param } from 'express-validator';
+import { body, param } from 'express-validator';
 
 import { validateRequest } from '../../middlewares/validate-request';
 import { SearchResponse } from '../models/search-response';
@@ -16,12 +16,13 @@ export function createSequencesRouter(client: Client): Router {
 
   router.post(
     '/api/sequences/:fixtureId',
-    [
-      param('fixtureId')
-        .not()
-        .isEmpty()
-        .withMessage('Please provide a fixtureId'),
-    ],
+    body('eventIds')
+      .isArray({ min: 1 })
+      .withMessage('Please provide at least one eventId'),
+    param('fixtureId')
+      .not()
+      .isEmpty()
+      .withMessage('Please provide a fixtureId'),
     validateRequest,
     async (req: Request, res: Response) => {
       const fixtureId = req.params['fixtureId'];

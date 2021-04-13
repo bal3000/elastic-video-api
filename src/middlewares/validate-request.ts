@@ -9,12 +9,7 @@ export const validateRequest = (
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    res.status(400).send({
-      errors: errors.array().map((e) => ({
-        message: e.msg,
-        field: e.param,
-      })),
-    });
+    return res.status(400).json({ errors: errors.array() });
   }
 
   next();
