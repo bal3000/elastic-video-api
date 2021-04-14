@@ -16,7 +16,7 @@ app.use(createSequencesRouter(client));
 app.use(getVideoRouter);
 
 app.all('*', (req, res) => {
-  res.status(404).send('Not Found');
+  res.sendStatus(404);
 });
 
 export default app;

@@ -26,8 +26,12 @@ router.get(
 
       res.send(data.match);
     } catch (err) {
-      console.log(err);
-      res.sendStatus(500);
+      if (err.response.status && err.response.status === 404) {
+        return res.sendStatus(404);
+      } else {
+        console.log(err);
+        return res.sendStatus(500);
+      }
     }
   }
 );

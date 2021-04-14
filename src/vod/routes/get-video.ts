@@ -1,29 +1,49 @@
 import express, { Request, Response } from 'express';
-import { body } from 'express-validator';
+import { param } from 'express-validator';
+import axios, { AxiosRequestConfig } from 'axios';
 
-interface RequestBody {
-  fixtureId: string;
-  sequences: number[];
-}
+import { validateRequest } from '../../middlewares/validate-request';
+import { Videos } from '../models/videos';
 
 const router = express.Router();
 
-router.post(
-  '/api/vod',
-  body('fixtureId')
+router.get(
+  '/api/vod/:fixtureId/:sequenceId',
+  param('fixtureId')
     .notEmpty()
     .isLength({ min: 5 })
     .withMessage('Please provide a fixtureId'),
-  body('sequences')
-    .isArray({ min: 1 })
+  param('sequenceId')
+    .isInt({ gt: 0 })
     .withMessage('Please provide at least one sequence'),
-  (req: Request, res: Response) => {
-    const { fixtureId, sequences }: RequestBody = req.body;
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const fixtureId = req.params['fixtureId'];
+    const sequenceId = req.params['sequenceId'];
     const apiKey = '';
 
-    // Call vod api here with given values
+    try {
+      const config: AxiosRequestConfig = {
+        headers: {
+          APIKey: apiKey,
+        },
+      };
+      // Call vod api here with given values
+      const { data } = await axios.get<Videos>(
+        `/soccer/${fixtureId}/${sequenceId}/-2/10`,
+        config
+      );
 
-    res.sendStatus(404);
+      if (!data) {
+        res.sendStatus(404);
+        return;
+      }
+
+      res.send(data);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
   }
 );
 
